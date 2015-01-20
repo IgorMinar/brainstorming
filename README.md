@@ -107,7 +107,7 @@ A decorator is defined as a function accepting the decorator’s target as an ar
 ```TypeScript
 // A simple decorator  
 @annotation  
-function globalFunc() { }  
+class MyClass { }  
   
 function annotation(target) {  
    // Add a property on target  
@@ -119,7 +119,7 @@ Alternatively a decorator factory can be specified accepting additional argument
 
 ```TypeScript
 @isTestable(true)  
-function globalFunc() { }  
+class MyClass { }  
   
 function isTestable(value) {  
    return function decorator(target) {  
@@ -131,9 +131,11 @@ function isTestable(value) {
 A decorator can also alter the target:
 
 ```TypeScript
-@fail  
-function Func() { console.log("original"); }  
-  
+class C { 
+  @fail  
+  func() { console.log("original"); }  
+}
+
 function fail(target) {  
    // return a new function instead of target  
    return function() { throw new Error("fail");}  
@@ -158,9 +160,13 @@ function enumerable(value) {
 
 # <a name="3"/>3 Transformation details:
 
-## <a name="3.1"/>3.1 Class Declaration
+## <a name="3.1"/>3.1 Introduction
 
-### <a name="3.1.1"/>3.1.1 Syntax
+This section shows the desugaring/compilation of the annotation forms to their corresponding ES5 and ES6.
+
+## <a name="3.2"/>3.2 Class Declaration
+
+### <a name="3.2.1"/>3.2.1 Syntax
 
 ```TypeScript
 @F("color")  
@@ -169,7 +175,7 @@ class Foo {
 }
 ```
 
-### <a name="3.1.2"/>3.1.2 Desugaring (ES6)
+### <a name="3.2.2"/>3.2.2 Desugaring (ES6)
 
 ```TypeScript
 var Foo = (function () {  
@@ -181,7 +187,7 @@ var Foo = (function () {
 })();
 ```
 
-### <a name="3.1.3"/>3.1.3 Desugaring (ES5)
+### <a name="3.2.3"/>3.2.3 Desugaring (ES5)
 
 ```TypeScript
 var Foo = (function () {  
@@ -190,30 +196,6 @@ var Foo = (function () {
   
     Foo = F("color")(Foo = G(Foo) || Foo) || Foo;  
     return Foo;  
-})();
-```
-
-## <a name="3.2"/>3.2 Function Declaration
-
-Note that decorators applied to a function declaration would necessitate a TDZ for the declaration. The desugared emit below illustrates this as the function declaration is evaluated inside an IIFE
-
-### <a name="3.2.1"/>3.2.1 Syntax
-
-```TypeScript
-@F("color")  
-@G  
-function Func() {  
-}
-```
-
-### <a name="3.2.2"/>3.2.2 Desugaring
-
-```TypeScript
-var Func = (function () {  
-    function Func() {  
-    }  
-    Func = F("color")(Func = G(Func) || Func) || Func;  
-    return Func;  
 })();
 ```
 
@@ -272,30 +254,11 @@ var Foo = (function () {
 })();
 ```
 
-## <a name="3.5"/>3.5 Function Parameter Declaration
+
+
+## <a name="3.5"/>3.5 Class Method Declaration
 
 ### <a name="3.5.1"/>3.5.1 Syntax
-
-```TypeScript
-function Func(@F("color") @G param0) {  
-}
-```
-
-### <a name="3.5.2"/>3.5.2 Desugaring
-
-```TypeScript
-var Func = (function () {  
-    function Func(param0) {  
-    }  
-  
-    F("color")((G(Func, 0), Func), 0);  
-    return Func;  
-})();
-```
-
-## <a name="3.6"/>3.6 Class Method Declaration
-
-### <a name="3.6.1"/>3.6.1 Syntax
 
 ```TypeScript
 class Foo {  
@@ -305,7 +268,7 @@ class Foo {
 }
 ```
 
-### <a name="3.6.2"/>3.6.2 Desugaring (ES6)
+### <a name="3.5.2"/>3.5.2 Desugaring (ES6)
 
 ```TypeScript
 var Foo = (function () {  
@@ -322,7 +285,7 @@ var Foo = (function () {
 })();
 ```
 
-### <a name="3.6.3"/>3.6.3 Desugaring (ES5)
+### <a name="3.5.3"/>3.5.3 Desugaring (ES5)
 
 ```TypeScript
 var Foo = (function () {  
@@ -339,9 +302,9 @@ var Foo = (function () {
 })();
 ```
 
-## <a name="3.7"/>3.7 Class Accessor Declaration
+## <a name="3.6"/>3.6 Class Accessor Declaration
 
-### <a name="3.7.1"/>3.7.1 Syntax
+### <a name="3.6.1"/>3.6.1 Syntax
 
 ```TypeScript
 class Foo {  
@@ -352,7 +315,7 @@ class Foo {
 }
 ```
 
-### <a name="3.7.2"/>3.7.2 Desugaring (ES6)
+### <a name="3.6.2"/>3.6.2 Desugaring (ES6)
 
 ```TypeScript
 var Foo = (function () {  
@@ -370,7 +333,7 @@ var Foo = (function () {
 })();
 ```
 
-### <a name="3.7.3"/>3.7.3 Desugaring (ES5)
+### <a name="3.6.3"/>3.6.3 Desugaring (ES5)
 
 ```TypeScript
 var Foo = (function () {  
@@ -391,9 +354,9 @@ var Foo = (function () {
 })();
 ```
 
-## <a name="3.8"/>3.8 Object Literal Method Declaration
+## <a name="3.7"/>3.7 Object Literal Method Declaration
 
-### <a name="3.8.1"/>3.8.1 Syntax
+### <a name="3.7.1"/>3.7.1 Syntax
 
 ```TypeScript
 var o = {  
@@ -403,7 +366,7 @@ var o = {
 }
 ```
 
-### <a name="3.8.2"/>3.8.2 Desugaring (ES6)
+### <a name="3.7.2"/>3.7.2 Desugaring (ES6)
 
 ```TypeScript
 var o = (function () {  
@@ -420,7 +383,7 @@ var o = (function () {
 })();
 ```
 
-### <a name="3.8.3"/>3.8.3 Desugaring (ES5)
+### <a name="3.7.3"/>3.7.3 Desugaring (ES5)
 
 ```TypeScript
 var o = (function () {  
@@ -437,9 +400,9 @@ var o = (function () {
 })();
 ```
 
-## <a name="3.9"/>3.9 Object Literal Accessor Declaration
+## <a name="3.8"/>3.8 Object Literal Accessor Declaration
 
-### <a name="3.9.1"/>3.9.1 Syntax
+### <a name="3.8.1"/>3.8.1 Syntax
 
 ```TypeScript
 var o = {  
@@ -450,7 +413,7 @@ var o = {
 }
 ```
 
-### <a name="3.9.2"/>3.9.2 Desugaring (ES6)
+### <a name="3.8.2"/>3.8.2 Desugaring (ES6)
 
 ```TypeScript
 var o = (function () {  
@@ -468,7 +431,7 @@ var o = (function () {
 })();
 ```
 
-### <a name="3.9.3"/>3.9.3 Desugaring (ES5)
+### <a name="3.8.3"/>3.8.3 Desugaring (ES5)
 
 ```TypeScript
 var o = (function () {  
@@ -489,11 +452,8 @@ var o = (function () {
 })();
 ```
 
-# <a name="4"/>4 Temporal dead zone
 
-Since decorator evaluation involved expressions, decorated function declarations cannot be hoisted to the containing scope. Rather they should be treated similar to ES6 classes where only the function’s symbol is hoisted to the top but remains undefined until the definition is encountered. 
-
-# <a name="5"/>5 Examples
+# <a name="5"/>4 Examples
 
 TODO: add examples.
 
@@ -784,4 +744,53 @@ declare const enum DecoratorTargets {
   * array literals of one of the previous kinds,
   * object literal with only properties with values of one of the previous kinds
 * Examples: @conditional, @deprecated, @profile
+
+# <a name="D"/>D Function declaration support
+
+## <a name="D.1"/>D.1 Function Declaration
+
+Since decorator evaluation involved expressions, decorated function declarations cannot be hoisted to the containing scope. Rather they should be treated similar to ES6 classes where only the function’s symbol is hoisted to the top but remains undefined until the definition is encountered. 
+
+Note that decorators applied to a function declaration would necessitate a TDZ for the declaration. The desugared emit below illustrates this as the function declaration is evaluated inside an IIFE
+
+### <a name="D.1.1"/>D.1.1 Syntax
+
+```TypeScript
+@F("color")  
+@G  
+class Func() {  
+}
+```
+
+### <a name="D.1.2"/>D.1.2 Desugaring
+
+```TypeScript
+var Func = (function () {  
+    function Func() {  
+    }  
+    Func = F("color")(Func = G(Func) || Func) || Func;  
+    return Func;  
+})();
+```
+
+## <a name="D.2"/>D.2 Function Parameter Declaration
+
+### <a name="D.2.1"/>D.2.1 Syntax
+
+```TypeScript
+function Func(@F("color") @G param0) {  
+}
+```
+
+### <a name="D.2.2"/>D.2.2 Desugaring
+
+```TypeScript
+var Func = (function () {  
+    function Func(param0) {  
+    }  
+  
+    F("color")((G(Func, 0), Func), 0);  
+    return Func;  
+})();
+```
 
