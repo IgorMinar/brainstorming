@@ -453,9 +453,83 @@ var o = (function () {
 ```
 
 
-# <a name="5"/>4 Examples
+# <a name="4"/>4 Examples
 
-TODO: add examples.
+### <a name="4.1"/>4.1 Inject
+
+```TypeScript
+// TypeScript Souce
+function Inject(@type type: Function) {
+    return function (constructor) {
+        constructor.annotate = constructor.annotate || [];
+        constructor.annotate.push(new inject(type));
+    }
+}
+
+class Engine {
+}
+
+class Car {
+    constructor(@Inject() engine: Engine) {
+    }
+}
+
+
+// ES3/ES5 
+var Car = (function () {
+    function Car(engine) {
+    }
+
+    Inject(/* @type */ Engine)(Car, /* paramterIndex */ 0);
+
+    return Car;
+})();
+
+// ES7 decorator proposal
+class Car {
+    constructor(@Inject(Engine) engine) {
+    }
+}
+```
+
+### <a name="4.2"/>4.2 Component
+
+```TypeScript
+// TypeScript Souce
+function Component(options, @parameterTypes types?: Function[]) {
+    return function (constructor) {
+        constructor.annotate = constructor.annotate || [];
+        constructor.annotate.push(new component(options));
+        constructor.parameters = types;
+    }
+}
+
+@Component({
+    selector: 'b'
+})
+class MyComponent {
+    constructor(server: Server, service: Service) { }
+}
+
+
+// ES3/ES5 
+var MyComponent = (function () {
+    function MyComponent(server, service) {
+    }
+
+    MyComponent = Component({ selector: 'b' }, /* @parameterTypes */[Server, Service])(MyComponent) || MyComponent;
+
+    return MyComponent;
+})();
+
+// ES7 decorator proposal
+@Component({
+    selector: 'b'
+}, [Server, Service])
+class MyComponent {
+    constructor(server, service) { }
+}
+```
 
 # <a name="A"/>A Grammar
 
@@ -512,16 +586,8 @@ NOTE	The production *CoverMemberExpressionSquareBracketsAndComputedPropertyName*
 &emsp;&emsp;*FormalParameter*<sub> [Yield, GeneratorParameter]</sub>&emsp;:  
 &emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;*BindingElement*<sub> [?Yield, ?GeneratorParameter]</sub>
 
-&emsp;&emsp;*FunctionDeclaration*<sub> [Yield, Default]</sub>&emsp;:  
-&emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;*BindingIdentifier*<sub> [?Yield]</sub>&emsp;`(`&emsp;*FormalParameters*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
-&emsp;&emsp;&emsp;[+Default] *DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;`(`&emsp;*FormalParameters*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
-
 &emsp;&emsp;*FunctionExpression*&emsp;:  
 &emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;*BindingIdentifier*<sub> opt</sub>&emsp;`(`&emsp;*FormalParameters*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
-
-&emsp;&emsp;*GeneratorDeclaration*<sub> [Yield, Default]</sub>&emsp;:  
-&emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;`*`&emsp;*BindingIdentifier*<sub> [?Yield]</sub>&emsp;`(`&emsp;*FormalParameters*<sub> [Yield, GeneratorParameter]</sub>&emsp;`)`&emsp;`{`&emsp;*GeneratorBody*<sub> [Yield]</sub>&emsp;`}`  
-&emsp;&emsp;&emsp;[+Default] *DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;`*`&emsp;`(`&emsp;*FormalParameters*<sub> [Yield, GeneratorParameter]</sub>&emsp;`)`&emsp;`{`&emsp;*GeneratorBody*<sub> [Yield]</sub>&emsp;`}`
 
 &emsp;&emsp;*GeneratorExpression*&emsp;:  
 &emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;*BindingIdentifier*<sub> [Yield]opt</sub>&emsp;`(`&emsp;*FormalParameters*<sub> [Yield, GeneratorParameter]</sub>&emsp;`)`&emsp;`{`&emsp;*GeneratorBody*<sub> [Yield]</sub>&emsp;`}`
@@ -793,4 +859,13 @@ var Func = (function () {
     return Func;  
 })();
 ```
+### <a name="D.3"/>D.3 Grammar
+
+&emsp;&emsp;*FunctionDeclaration*<sub> [Yield, Default]</sub>&emsp;:  
+&emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;*BindingIdentifier*<sub> [?Yield]</sub>&emsp;`(`&emsp;*FormalParameters*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`  
+&emsp;&emsp;&emsp;[+Default] *DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;`(`&emsp;*FormalParameters*&emsp;`)`&emsp;`{`&emsp;*FunctionBody*&emsp;`}`
+
+&emsp;&emsp;*GeneratorDeclaration*<sub> [Yield, Default]</sub>&emsp;:  
+&emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;`*`&emsp;*BindingIdentifier*<sub> [?Yield]</sub>&emsp;`(`&emsp;*FormalParameters*<sub> [Yield, GeneratorParameter]</sub>&emsp;`)`&emsp;`{`&emsp;*GeneratorBody*<sub> [Yield]</sub>&emsp;`}`  
+&emsp;&emsp;&emsp;[+Default] *DecoratorList*<sub> [?Yield]opt</sub>&emsp;`function`&emsp;`*`&emsp;`(`&emsp;*FormalParameters*<sub> [Yield, GeneratorParameter]</sub>&emsp;`)`&emsp;`{`&emsp;*GeneratorBody*<sub> [Yield]</sub>&emsp;`}`
 
