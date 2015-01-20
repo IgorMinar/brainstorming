@@ -302,6 +302,21 @@ var Foo = (function () {
 })();
 ```
 
+### <a name="3.5.4"/>3.5.4 By-hand for annotations not requiring descriptors (ES5)
+
+```TypeScript
+var Foo = (function () {
+    function Foo() {
+    }
+    Foo.prototype.bar = function () { }
+
+    G(Foo.prototype, "bar");
+    F("color")(Foo.prototype, "bar");
+
+    return Foo;
+})();
+```
+
 ## <a name="3.6"/>3.6 Class Accessor Declaration
 
 ### <a name="3.6.1"/>3.6.1 Syntax
