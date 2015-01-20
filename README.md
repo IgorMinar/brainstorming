@@ -29,7 +29,7 @@ var david = new Person('David', 'Tang');
 david.fullName; /// Tang, David
 ```
 
-## <a name="1.3"/>1.3 Dynamic Instantiation (composition)
+## <a name="1.3"/>1.3 Dynamic Instantiation/Dependency Injection (composition)
 
 Consider Angular 2.0 DI implementation example:
 
