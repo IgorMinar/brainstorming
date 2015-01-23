@@ -131,14 +131,16 @@ function isTestable(value) {
 A decorator can also alter the target:
 
 ```TypeScript
-class C { 
-  @fail  
-  func() { console.log("original"); }  
-}
+@log
+var func = function() {
+    ...
+};
 
-function fail(target) {  
-   // return a new function instead of target  
-   return function() { throw new Error("fail");}  
+function log(target) {
+    return function() {
+        target.apply(this, arguments);
+        console.log("Function called!");
+    };
 }
 ```
 
