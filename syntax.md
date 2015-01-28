@@ -35,14 +35,6 @@ NOTE	The production *CoverMemberExpressionSquareBracketsAndComputedPropertyName*
 &emsp;&emsp;&emsp;`super`&emsp;*CoverMemberExpressionSquareBracketsAndComputedPropertyName*<sub> [?Yield]</sub>  
 &emsp;&emsp;&emsp;`super`&emsp;`.`&emsp;*IdentifierName*
 
-&emsp;&emsp;*CallExpression*<sub> [Yield]</sub>&emsp;:  
-&emsp;&emsp;&emsp;*MemberExpression*<sub> [?Yield]</sub>&emsp;*Arguments*<sub> [?Yield]</sub>  
-&emsp;&emsp;&emsp;*SuperCall*<sub> [?Yield]</sub>  
-&emsp;&emsp;&emsp;*CallExpression*<sub> [?Yield]</sub>&emsp;*Arguments*<sub> [?Yield]</sub>  
-&emsp;&emsp;&emsp;*CallExpression*<sub> [?Yield]</sub>&emsp;*CoverMemberExpressionSquareBracketsAndComputedPropertyName*<sub> [In, ?Yield]</sub>  
-&emsp;&emsp;&emsp;*CallExpression*<sub> [?Yield]</sub>&emsp;`.`&emsp;*IdentifierName*  
-&emsp;&emsp;&emsp;*CallExpression*<sub> [?Yield]</sub>&emsp;*TemplateLiteral*<sub> [?Yield]</sub>
-
 &emsp;&emsp;*ClassDeclaration*<sub> [Yield, Default]</sub>&emsp;:  
 &emsp;&emsp;&emsp;*DecoratorList*<sub> [?Yield]opt</sub>&emsp;`class`&emsp;*BindingIdentifier*<sub> [?Yield]</sub>&emsp;*ClassTail*<sub> [?Yield]</sub>  
 &emsp;&emsp;&emsp;[+Default] *DecoratorList*<sub> [?Yield]opt</sub>&emsp;`class`&emsp;*ClassTail*<sub> [?Yield]</sub>
