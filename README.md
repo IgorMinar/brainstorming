@@ -692,9 +692,9 @@ class Foo {
     }  
 }  
   
-function F(tag: string, @paramterTypes types?: Function[]) {  
+function F(tag: string, @parameterTypes types?: Function[]) {  
     return function (target) {  
-        target.paramterTypes = types; // [Object, Number, Object, C2]  
+        target.parameterTypes = types; // [Object, Number, Object, C2]  
     }  
 }
 ```
@@ -705,7 +705,7 @@ function F(tag: string, @paramterTypes types?: Function[]) {
 
 @returnType – The serialized form of the return type of the decorator target if it is a function type, undefined otherwise
 
-@paramterTypes – A list of serialized types of the decorator target’s arguments if it is a function type, undefined otherwise
+@parameterTypes – A list of serialized types of the decorator target’s arguments if it is a function type, undefined otherwise
 
 @name – The name of the decorator target 
 
