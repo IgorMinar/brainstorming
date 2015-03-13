@@ -2,7 +2,7 @@
 
 * Effect of decorators is predictable.  
 * Metadata persists as decorators are applied.  Even if a decorator returns a new object, metadata persists.
-* Clean ES5
+* Clean ES6 and ES5
 
 # Examples
 
