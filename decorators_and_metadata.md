@@ -48,10 +48,9 @@ function decorator1(target) {
 
 //pseudo-code for Reflect API
 Reflect.decorate = function(decorators, target) {
-  var new_target = target;
   //for each decorator in reverse
   for (var i = decorators.length - 1; i >= 0; i--) {
-    new_target = decorator(target);
+    var new_target = decorator(target);
     //merge metadata to persist metadata between decorator calls
     if (new_target != null && new_target !== target) { 
       if (typeof Reflect.mergeMetadata === “Function”) {
